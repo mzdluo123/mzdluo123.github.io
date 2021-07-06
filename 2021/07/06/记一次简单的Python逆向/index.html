@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>记一次简单的Python逆向 | RainChan的小博客</title><meta name="keywords" content="逆向工程"><meta name="author" content="RainChan"><meta name="copyright" content="RainChan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="闲来无事，帮朋友逆向了一个使用Pyinstall打包的程序，记录一下踩到的坑 步骤首先尝试直接使用pyinstxtractor.py进行解包，但是遇到了一个错误 12[+] Processing .\*****[!] Error : Unsupported pyinstaller version or not a pyinstaller archive 在这个步骤上我卡了很久，最后在pyinstx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次简单的Python逆向">
+<meta property="og:url" content="https://rainchan.win/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/index.html">
+<meta property="og:site_name" content="RainChan的小博客">
+<meta property="og:description" content="闲来无事，帮朋友逆向了一个使用Pyinstall打包的程序，记录一下踩到的坑 步骤首先尝试直接使用pyinstxtractor.py进行解包，但是遇到了一个错误 12[+] Processing .\*****[!] Error : Unsupported pyinstaller version or not a pyinstaller archive 在这个步骤上我卡了很久，最后在pyinstx">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/9bd9b167gy1fwrteef8x2j21hc0u0ql4.jpg">
+<meta property="article:published_time" content="2021-07-06T14:27:40.000Z">
+<meta property="article:modified_time" content="2021-07-06T06:55:26.224Z">
+<meta property="article:author" content="RainChan">
+<meta property="article:tag" content="逆向工程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva2.sinaimg.cn/large/9bd9b167gy1fwrteef8x2j21hc0u0ql4.jpg"><link rel="shortcut icon" href="https://s2.ax1x.com/2019/10/20/KM0NNQ.jpg"><link rel="canonical" href="https://rainchan.win/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-06 06:55:26'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-64K0QTCY3T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-64K0QTCY3T');
+</script>
+<meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://tva2.sinaimg.cn/large/9bd9b167gy1fwrteef8x2j21hc0u0ql4.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">RainChan的小博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">记一次简单的Python逆向</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-06T14:27:40.000Z" title="发表于 2021-07-06 14:27:40">2021-07-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-06T06:55:26.224Z" title="更新于 2021-07-06 06:55:26">2021-07-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">711</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>闲来无事，帮朋友逆向了一个使用Pyinstall打包的程序，记录一下踩到的坑</p>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><p>首先尝试直接使用<code>pyinstxtractor.py</code>进行解包，但是遇到了一个错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+] Processing .\*****</span><br><span class="line">[!] Error : Unsupported pyinstaller version or not a pyinstaller archive</span><br></pre></td></tr></table></figure>
+<p>在这个步骤上我卡了很久，最后在pyinstxtractor的GitHub wiki找到了信息。原来是在解包之前需要进行一步操作。<a target="_blank" rel="noopener" href="https://github.com/extremecoders-re/pyinstxtractor/wiki/Extracting-Linux-ELF-binaries">Wiki原文</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objcopy --dump-section pydata=pydata.dump testfile.elf</span><br></pre></td></tr></table></figure>
+<p>执行这条命令之后产生<code>pydata.dump</code>，再用<code>pyinstxtractor.py</code>解包即可</p>
+<p>出现以下提示表示解包成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[+] Processing .\pydata.dump</span><br><span class="line">[+] Pyinstaller version: 2.1+</span><br><span class="line">[+] Python version: 38</span><br><span class="line">[+] Length of package: 8097846 bytes</span><br><span class="line">[+] Found 57 files in CArchive</span><br><span class="line">[+] Beginning extraction...please standby</span><br><span class="line">[+] Possible entry point: pyiboot01_bootstrap.pyc</span><br><span class="line">[+] Possible entry point: pyi_rth_multiprocessing.pyc</span><br><span class="line">[+] Possible entry point: pyi_rth_certifi.pyc</span><br><span class="line">[+] Possible entry point: poolgui.pyc</span><br><span class="line">[+] Found 420 files in PYZ archive</span><br><span class="line">[+] Successfully extracted pyinstaller archive: .\pydata.dump</span><br><span class="line"></span><br><span class="line">You can now use a python decompiler on the pyc files within the extracted directory</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们可以在解包后的文件夹内找到许多pyc文件。找到入口文件后输入以下代码即可反编译为py文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uncompyle6 .\xxx.pyc &gt; .\xxx.py</span><br></pre></td></tr></table></figure>
+<p>其中，<code>uncompyle6</code>是开源软件，可以使用pip安装。但是还未支持python3.9。如果是python3.9的pyc文件只能手动查阅字节码。</p>
+<p>虽然<code>uncompyle6</code>能够反编译python代码，但是很多情况下他是无法完全反编译出全部代码的，例如样本中的例子(部分信息已打码)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">L. <span class="number">378</span>      <span class="number">1206</span>  LOAD_GLOBAL              socket</span><br><span class="line">            <span class="number">1208</span>  LOAD_METHOD              gethostname</span><br><span class="line">            <span class="number">1210</span>  CALL_METHOD_0         <span class="number">0</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="number">1212</span>  STORE_FAST               <span class="string">&#x27;hostname&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">379</span>      <span class="number">1214</span>  LOAD_GLOBAL              socket</span><br><span class="line">            <span class="number">1216</span>  LOAD_METHOD              gethostbyname</span><br><span class="line">            <span class="number">1218</span>  LOAD_FAST                <span class="string">&#x27;hostname&#x27;</span></span><br><span class="line">            <span class="number">1220</span>  CALL_METHOD_1         <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="number">1222</span>  STORE_FAST               <span class="string">&#x27;local_host_ip&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">381</span>      <span class="number">1224</span>  BUILD_MAP_0           <span class="number">0</span> </span><br><span class="line">            <span class="number">1226</span>  STORE_FAST               <span class="string">&#x27;headers&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">383</span>      <span class="number">1228</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1230</span>  LOAD_GLOBAL              sys_userAddress</span><br><span class="line">            <span class="number">1232</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">384</span>      <span class="number">1234</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1236</span>  LOAD_FAST                <span class="string">&#x27;sys_totalPlotsNb&#x27;</span></span><br><span class="line">            <span class="number">1238</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">385</span>      <span class="number">1240</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1242</span>  LOAD_FAST                <span class="string">&#x27;sys_poolPoints&#x27;</span></span><br><span class="line">            <span class="number">1244</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">386</span>      <span class="number">1246</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1248</span>  LOAD_GLOBAL              sys_softVersion</span><br><span class="line">            <span class="number">1250</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">387</span>      <span class="number">1252</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1254</span>  LOAD_FAST                <span class="string">&#x27;local_host_ip&#x27;</span></span><br><span class="line">            <span class="number">1256</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">388</span>      <span class="number">1258</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1260</span>  LOAD_FAST                <span class="string">&#x27;hostname&#x27;</span></span><br><span class="line">            <span class="number">1262</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">389</span>      <span class="number">1264</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1266</span>  LOAD_FAST                <span class="string">&#x27;sys_trustScore&#x27;</span></span><br><span class="line">            <span class="number">1268</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">390</span>      <span class="number">1270</span>  LOAD_GLOBAL              <span class="built_in">str</span></span><br><span class="line">            <span class="number">1272</span>  LOAD_FAST                <span class="string">&#x27;hash_uniquePlotsLibraryId&#x27;</span></span><br><span class="line">            <span class="number">1274</span>  CALL_FUNCTION_1       <span class="number">1</span>  <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">382</span>      <span class="number">1276</span>  LOAD_CONST               (<span class="string">&#x27;address&#x27;</span>, <span class="string">&#x27;plots&#x27;</span>, <span class="string">&#x27;points&#x27;</span>, <span class="string">&#x27;version&#x27;</span>, <span class="string">&#x27;local&#x27;</span>, <span class="string">&#x27;hostname&#x27;</span>, <span class="string">&#x27;trust&#x27;</span>, <span class="string">&#x27;hash&#x27;</span>)</span><br><span class="line">            <span class="number">1278</span>  BUILD_CONST_KEY_MAP_8     <span class="number">8</span> </span><br><span class="line">            <span class="number">1280</span>  STORE_FAST               <span class="string">&#x27;data&#x27;</span></span><br><span class="line"></span><br><span class="line">L. <span class="number">392</span>      <span class="number">1282</span>  LOAD_GLOBAL              requests</span><br><span class="line">            <span class="number">1284</span>  LOAD_ATTR                post</span><br><span class="line">            <span class="number">1286</span>  LOAD_STR                 <span class="string">&#x27;这里是一个URL&#x27;</span></span><br><span class="line">            <span class="number">1288</span>  LOAD_FAST                <span class="string">&#x27;headers&#x27;</span></span><br><span class="line">            <span class="number">1290</span>  LOAD_FAST                <span class="string">&#x27;data&#x27;</span></span><br><span class="line">            <span class="number">1292</span>  LOAD_CONST               (<span class="string">&#x27;headers&#x27;</span>, <span class="string">&#x27;data&#x27;</span>)</span><br><span class="line">            <span class="number">1294</span>  CALL_FUNCTION_KW_3     <span class="number">3</span>  <span class="string">&#x27;3 total positional and keyword args&#x27;</span></span><br><span class="line">            <span class="number">1296</span>  STORE_FAST               <span class="string">&#x27;response&#x27;</span></span><br><span class="line">            <span class="number">1298</span>  POP_BLOCK        </span><br><span class="line">            <span class="number">1300</span>  JUMP_FORWARD       <span class="number">1332</span>  <span class="string">&#x27;to 1332&#x27;</span></span><br><span class="line">          <span class="number">1302</span>_0  COME_FROM_FINALLY  <span class="number">1204</span>  <span class="string">&#x27;1204&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>虽然这不是一眼可看出是什么作用的源代码，但是经过简单的思考还是能猜出这段代码的含义</p>
+<p>关于Python字节码的信息可以到<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/dis.html">官方文档</a>找到，这东西比汇编语言简单多了！</p>
+<h1 id="样本信息"><a href="#样本信息" class="headerlink" title="样本信息"></a>样本信息</h1><p>样本是一个Linux平台下使用Pyinstall的python程序</p>
+<p>sha256: 548a89c3f5a8846ae7a9aedda09018cb32f07cb333d9970d314b7c5ef60fb724</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">RainChan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rainchan.win/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/">https://rainchan.win/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rainchan.win" target="_blank">RainChan的小博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">逆向工程</a></div><div class="post_share"><div class="social-share" data-image="https://tva2.sinaimg.cn/large/9bd9b167gy1fwrteef8x2j21hc0u0ql4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/05/27/%E7%89%A9%E8%81%94%E7%BD%91%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A81/"><img class="next-cover" data-lazy-src="https://tva4.sinaimg.cn/large/9bd9b167gy1g4c8t3szutj21hc0u01kx.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">物联网开发入门1</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">RainChan</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mzdluo123"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">原HelloWorld的小博客，换个昵称吧~~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text">步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">2.</span> <span class="toc-text">样本信息</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/" title="记一次简单的Python逆向"><img data-lazy-src="https://tva2.sinaimg.cn/large/9bd9b167gy1fwrteef8x2j21hc0u0ql4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="记一次简单的Python逆向"/></a><div class="content"><a class="title" href="/2021/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84Python%E9%80%86%E5%90%91/" title="记一次简单的Python逆向">记一次简单的Python逆向</a><time datetime="2021-07-06T14:27:40.000Z" title="发表于 2021-07-06 14:27:40">2021-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/27/%E7%89%A9%E8%81%94%E7%BD%91%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A81/" title="物联网开发入门1"><img data-lazy-src="https://tva4.sinaimg.cn/large/9bd9b167gy1g4c8t3szutj21hc0u01kx.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="物联网开发入门1"/></a><div class="content"><a class="title" href="/2021/05/27/%E7%89%A9%E8%81%94%E7%BD%91%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A81/" title="物联网开发入门1">物联网开发入门1</a><time datetime="2021-05-27T14:58:39.000Z" title="发表于 2021-05-27 14:58:39">2021-05-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/18/NodeBB%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="NodeBB的自定义配置"><img data-lazy-src="https://tva4.sinaimg.cn/large/9bd9b167gy1g4li15ebxbj21hc0xc7wh.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NodeBB的自定义配置"/></a><div class="content"><a class="title" href="/2021/04/18/NodeBB%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="NodeBB的自定义配置">NodeBB的自定义配置</a><time datetime="2021-04-18T19:11:16.000Z" title="发表于 2021-04-18 19:11:16">2021-04-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/26/NodeJs%E7%88%AC%E5%8F%96%E8%85%BE%E8%AE%AF%E4%BC%81%E4%B8%9A%E9%82%AE%E4%BB%B6%E5%8F%8A%E9%99%84%E4%BB%B6/" title="NodeJs爬取腾讯企业邮件及附件"><img data-lazy-src="https://cdn.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210326151340.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NodeJs爬取腾讯企业邮件及附件"/></a><div class="content"><a class="title" href="/2021/03/26/NodeJs%E7%88%AC%E5%8F%96%E8%85%BE%E8%AE%AF%E4%BC%81%E4%B8%9A%E9%82%AE%E4%BB%B6%E5%8F%8A%E9%99%84%E4%BB%B6/" title="NodeJs爬取腾讯企业邮件及附件">NodeJs爬取腾讯企业邮件及附件</a><time datetime="2021-03-26T14:31:28.000Z" title="发表于 2021-03-26 14:31:28">2021-03-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/01/26/%E5%9C%A8Glitch%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%BD%A0%E7%9A%84Web%E5%BA%94%E7%94%A8/" title="在Glitch上部署你的Web应用"><img data-lazy-src="https://tva2.sinaimg.cn/large/005BYqpgly1frn8ytktjlj31kw0w07wh.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在Glitch上部署你的Web应用"/></a><div class="content"><a class="title" href="/2021/01/26/%E5%9C%A8Glitch%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%BD%A0%E7%9A%84Web%E5%BA%94%E7%94%A8/" title="在Glitch上部署你的Web应用">在Glitch上部署你的Web应用</a><time datetime="2021-01-26T16:50:32.000Z" title="发表于 2021-01-26 16:50:32">2021-01-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By RainChan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk({
+      clientID: 'a7f89493fe9d480aaff3',
+      clientSecret: 'da80ecf2ad0dff7a81bad3222eedd98cba397719',
+      repo: 'mzdluo123.github.io',
+      owner: 'mzdluo123',
+      admin: ['mzdluo123'],
+      id: '77362855967d43fb34d9b7494eeb124d',
+      language: 'zh-CN',
+      proxy: 'https://bloom-noiseless-wire.glitch.me/https://github.com/login/oauth/access_token',
+      perPage: 10,
+      distractionFreeMode: false,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      updateCountCallback: commentCount
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !true) {
+  if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
