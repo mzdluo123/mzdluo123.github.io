@@ -166,7 +166,7 @@
 <img src= "/img/loading.gif" data-lazy-src="https://img.shields.io/badge/-Android-green?style=flat-square&logo=Android&logoColor=fff"/> 
 </rol>
 
-<p>QQ : █████████ (&lt;-用小刀刮开看)</p>
+<p>QQ : <span id="qqnum">█████████</span> (&lt;-用小刀刮开看)</p>
 <h1 id="爱好"><a href="#爱好" class="headerlink" title="爱好"></a>爱好</h1><ul>
 <li>喜欢尝试各种新鲜事物</li>
 <li>喜欢计算机相关的各种东西，包括软硬件之类的各个方向。进一步的东西还在学习中。。。</li>
@@ -354,4 +354,12 @@ if ('Gitalk' === 'Gitalk' || !true) {
 
   newestCommentInit()
   document.addEventListener('pjax:complete', newestCommentInit)
+
+  window.addEventListener('mouseup', () => {
+    const sel = getSelection()
+    if (sel.focusOffset - sel.anchorOffset === 9 && sel.focusNode.textContent === '█████████')
+      document.querySelector('#qqnum').innerHTML = '2792937315'
+    else if (document.querySelector('#qqnum').innerHTML === '2792937315')
+      document.querySelector('#qqnum').innerHTML = '█████████'
+  })
 })</script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
