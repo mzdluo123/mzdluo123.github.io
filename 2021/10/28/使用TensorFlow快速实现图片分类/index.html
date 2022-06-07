@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>使用TensorFlow快速实现图片分类 | RainChan的小博客</title><meta name="keywords" content="深度学习,AI"><meta name="author" content="RainChan"><meta name="copyright" content="RainChan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言 现在网络上深度学习非常热门，同时深度学习的门槛也越来越低。在TensorFlow中也提供了一些非常简单的方式让初学者甚至是没有接触过深度学习的小白都能快速上手 本文通过一个简单的图片分类例子来演示一下如何快速使用TensorFlow搭建完成目标 由于一些小型数据集(例如MNIST)不能表现出实际训练中遇到的一些问题，本文使用Kaggle上的nsfw-images-data 数据集来制作一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用TensorFlow快速实现图片分类">
+<meta property="og:url" content="https://rainchan.win/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/index.html">
+<meta property="og:site_name" content="RainChan的小博客">
+<meta property="og:description" content="前言 现在网络上深度学习非常热门，同时深度学习的门槛也越来越低。在TensorFlow中也提供了一些非常简单的方式让初学者甚至是没有接触过深度学习的小白都能快速上手 本文通过一个简单的图片分类例子来演示一下如何快速使用TensorFlow搭建完成目标 由于一些小型数据集(例如MNIST)不能表现出实际训练中遇到的一些问题，本文使用Kaggle上的nsfw-images-data 数据集来制作一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pximg2.rainchan.win/img?img_id=64702380&web=true">
+<meta property="article:published_time" content="2021-10-28T02:21:40.000Z">
+<meta property="article:modified_time" content="2021-10-28T03:44:14.838Z">
+<meta property="article:author" content="RainChan">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pximg2.rainchan.win/img?img_id=64702380&web=true"><link rel="shortcut icon" href="https://s2.ax1x.com/2019/10/20/KM0NNQ.jpg"><link rel="canonical" href="https://rainchan.win/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-28 11:44:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://pximg2.rainchan.win/img?img_id=64702380&amp;web=true')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">RainChan的小博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用TensorFlow快速实现图片分类</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-28T02:21:40.000Z" title="发表于 2021-10-28 10:21:40">2021-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-28T03:44:14.838Z" title="更新于 2021-10-28 11:44:14">2021-10-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>现在网络上深度学习非常热门，同时深度学习的门槛也越来越低。在TensorFlow中也提供了一些非常简单的方式让初学者甚至是没有接触过深度学习的小白都能快速上手</p>
+<p>本文通过一个简单的图片分类例子来演示一下如何快速使用TensorFlow搭建完成目标</p>
+<p>由于一些小型数据集(例如MNIST)不能表现出实际训练中遇到的一些问题，本文使用Kaggle上的<a target="_blank" rel="noopener" href="https://www.kaggle.com/laxmansingh/nsfw-images-data">nsfw-images-data</a> 数据集来制作一个图片分类Bot,(实际使用案例 <a target="_blank" rel="noopener" href="https://mirai.mamoe.net/topic/694">https://mirai.mamoe.net/topic/694</a> )</p>
+<h1 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h1>
+<p>自己去看另一个文章</p>
+<h1 id="数据的加载和预处理"><a class="markdownIt-Anchor" href="#数据的加载和预处理"></a> 数据的加载和预处理</h1>
+<p>在TensorFlow的官方快速上手教程里，数据集将直接完全载入到内存中。但对于本文的 30GB 大小的数据集来说这完全不限时。只能依靠<code>tf.data</code>提供的数据加载流水线完成数据的预加载和处理。</p>
+<p>使用TensorFlow提供的数据加载处理流水线还有一个好处：它能够绕过Python GIL的限制来加速数据读入和处理，这可以保证在任何时候io和预处理都不会成为影响训练时间的瓶颈</p>
+<h2 id="处理标签"><a class="markdownIt-Anchor" href="#处理标签"></a> 处理标签</h2>
+<p><img src= "/img/loading.gif" data-lazy-src="https://i.loli.net/2021/10/28/t9yKvWBc6kLGmfz.png" alt="" /></p>
+<p>数据集已经做好了<code>测试集/训练集</code>的划分，图片总共有五个分类。我们需要先将图片标签使用<code>One-Hot</code>的方式进行编码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">One-Hot编码就像这样</span><br><span class="line"></span><br><span class="line">假如你有四个分类A,B,C,D 先给这些分类编一个序号。例如A:0,B:1,C:2,D:3</span><br><span class="line"></span><br><span class="line">则A的One-Hot编码就像这样:[1,0,0,0]</span><br><span class="line">B:[0,1,0,0]</span><br><span class="line"></span><br><span class="line">D:[0,0,0,1]</span><br></pre></td></tr></table></figure>
+<p>得到所有的分类并进行One-Hot编码后放入一个字典备用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">label = <span class="built_in">dict</span>((v.name, k) <span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">enumerate</span>(pathlib.Path(<span class="string">&quot;setu/train&quot;</span>).iterdir()))</span><br><span class="line">one_hot_label = <span class="built_in">dict</span>((k, v) <span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">zip</span>(label.keys(), tf.one_hot(<span class="built_in">list</span>(label.values()), depth=<span class="built_in">len</span>(label))))</span><br></pre></td></tr></table></figure>
+<p><code>tf.one_hot</code>可以对整个列表里面的数据都进行One-Hot编码，只需要指定depth(分类数量)即可</p>
+<p>得到整个数据集内的图片文件列表并打乱顺序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">train_files = [i <span class="keyword">for</span> i <span class="keyword">in</span> pathlib.Path(<span class="string">&quot;setu/train&quot;</span>).glob(<span class="string">&quot;*/*&quot;</span>)]</span><br><span class="line">test_files = [i <span class="keyword">for</span> i <span class="keyword">in</span> pathlib.Path(<span class="string">&quot;setu/test&quot;</span>).glob(<span class="string">&quot;*/*&quot;</span>)]</span><br><span class="line">random.shuffle(train_files) <span class="comment">#随机打乱顺序</span></span><br><span class="line">random.shuffle(test_files)</span><br></pre></td></tr></table></figure>
+<p>现在开始构造<code>tf.data.DataSet</code>对象，这个对象用于在训练或者是验证过程中向模型输送数据，同时可以添加数据预处理步骤</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">train_file = tf.data.Dataset.from_tensor_slices([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> train_files])</span><br><span class="line">train_label = tf.data.Dataset.from_tensor_slices([one_hot_label[i.parent.name] <span class="keyword">for</span> i <span class="keyword">in</span> train_files])</span><br><span class="line"></span><br><span class="line">test_file = tf.data.Dataset.from_tensor_slices([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> test_files])</span><br><span class="line">test_label = tf.data.Dataset.from_tensor_slices([one_hot_label[i.parent.name] <span class="keyword">for</span> i <span class="keyword">in</span> test_files])</span><br></pre></td></tr></table></figure>
+<h2 id="处理图片"><a class="markdownIt-Anchor" href="#处理图片"></a> 处理图片</h2>
+<p>现在开始处理图片了，我们可以编写一个图片变换函数来对训练数据集进行随机变换，以增加输入到模型中数据的多样性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_process_train</span>(<span class="params">path</span>):</span></span><br><span class="line">    image = tf.io.read_file(path) <span class="comment"># 使用tf方式读文件 </span></span><br><span class="line">    image = tf.image.decode_image(image, channels=<span class="number">3</span>, expand_animations=<span class="literal">False</span>) <span class="comment"># 解码文件，设置为三个颜色通道并忽略动图</span></span><br><span class="line">    image = tf.image.random_jpeg_quality(image,<span class="number">30</span>,<span class="number">100</span>) <span class="comment"># 对图片进行随机图像压缩</span></span><br><span class="line">    image = tf.image.random_flip_up_down(image) <span class="comment"># 随机上下翻转</span></span><br><span class="line">    image = tf.image.random_flip_left_right(image) <span class="comment"># 随机左右翻转</span></span><br><span class="line">    image = tf.image.resize(image,(<span class="number">224</span>, <span class="number">224</span>) ) <span class="comment"># 缩放到(224,224)</span></span><br><span class="line">    image = image / <span class="number">255</span> <span class="comment"># 将像素的范围缩小到0-1，便于计算</span></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，稍后调用这个函数的输入为<code>Tensor</code>格式，所以你可能无法在这个函数内使用一些基于<code>numpy</code>或者是<code>OpenCV</code>的数据预处理方案。同时使用tf提供的预处理器也能够保证性能</p>
+<p>对测试数据集进行相同操作，在测试数据集中不要进行随机变换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_process_test</span>(<span class="params">path</span>):</span></span><br><span class="line">    image = tf.io.read_file(path)</span><br><span class="line">    image = tf.image.decode_image(image, channels=<span class="number">3</span>, expand_animations=<span class="literal">False</span>)</span><br><span class="line">    image = tf.image.resize(image, (<span class="number">224</span>, <span class="number">224</span>))</span><br><span class="line">    image = image / <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+<h2 id="构建数据处理流水线"><a class="markdownIt-Anchor" href="#构建数据处理流水线"></a> 构建数据处理流水线</h2>
+<p>在上面我们获得了一个存放有文件路径和路径对应的标签的<code>DataSet</code>对象，现在我们需要将这两个对象组合在一起。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">train_data = tf.data.Dataset.<span class="built_in">zip</span>((train_file, train_label))</span><br></pre></td></tr></table></figure>
+<p>这样就组合好了，接下来调用我们上面的函数来将对应的文件载入并进行变换；由于我们将两个数据集合并到了一起，所以上面的预处理函数得稍作修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_process_train</span>(<span class="params">path,y</span>):</span></span><br><span class="line">    image = tf.io.read_file(path)</span><br><span class="line">    image = tf.image.decode_image(image, channels=<span class="number">3</span>, expand_animations=<span class="literal">False</span>)</span><br><span class="line">    image = tf.image.random_jpeg_quality(image,<span class="number">30</span>,<span class="number">100</span>)</span><br><span class="line">    image = tf.image.random_flip_up_down(image)</span><br><span class="line">    image = tf.image.random_flip_left_right(image)</span><br><span class="line">    image = tf.image.resize(image,(<span class="number">224</span>, <span class="number">224</span>) )</span><br><span class="line">    image = image / <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> image,y</span><br><span class="line"></span><br><span class="line">train_data = tf.data.Dataset.<span class="built_in">zip</span>((train_file, train_label)).<span class="built_in">map</span>(_process_train,</span><br><span class="line">                                                                num_parallel_calls=<span class="number">8</span>).shuffle(</span><br><span class="line">    <span class="number">100</span>).repeat().batch(TRAIN_BENCH).prefetch(<span class="number">10</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>map</code>用于将数据集里面的每一条数据(文件路径，One-Hot格式的标签)输入到<code>_process_train</code>函数中，可以使用<code>num_parallel_calls</code>来指定并行单元数量来加快数据预处理</p>
+<p><code>shuffle</code>用于再次打乱训练数据集</p>
+<p><code>repeat</code> 用于循环读取数据</p>
+<p><code>batch</code>用于指定批次大小。如果显存大的话这里可以调大一些来加快训练速度</p>
+<p><code>prefetch</code>用来预先读取数据</p>
+<p>使用同样的方式构建测试数据集的流水线，但是在测试数据集中不要使用<code>shuffle</code>打乱数据</p>
+<h1 id="构建模型"><a class="markdownIt-Anchor" href="#构建模型"></a> 构建模型</h1>
+<p>由于是快速实现那就直接调库了，不用手动一层一层搭建了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = keras.applications.MobileNetV2(input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>), include_top=<span class="literal">True</span>, classes=<span class="number">5</span>,weights=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+<p><code>MobileNetV2</code>是一个轻量化模型，速度较快，准确率较好</p>
+<p><code>keras</code>位于<code>tf.keras</code></p>
+<p><code>input_shape</code>为输入向量的形状，宽度和高度都是<code>224</code>，具有三个颜色通道</p>
+<p><code>include_top</code> 为是否包含最终的判断概率输出层，这里选择是</p>
+<p><code>classes</code> 为分类数量，我们有五个分类选择5</p>
+<p><code>weights</code> 是否使用预训练的权重，这里不选择</p>
+<h1 id="编写训练代码"><a class="markdownIt-Anchor" href="#编写训练代码"></a> 编写训练代码</h1>
+<p>使用TensorFlow的keras可以快速开始训练简单的模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">model = get_model()</span><br><span class="line">model.summary()</span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=keras.optimizers.Adam(learning_rate=<span class="number">0.0001</span>),</span><br><span class="line">                loss=keras.losses.CategoricalCrossentropy(),</span><br><span class="line">                metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br></pre></td></tr></table></figure>
+<p><code>model.summary()</code>可以打印模型信息</p>
+<p><code>model.compile</code>可以将模型配置为训练状态</p>
+<p><code>optimizer</code> 优化器，我们使用<code>Adam</code>来优化我们的模型；其中学习率控制模型参数调整的幅度。过大的学习率会导致模型参数越过最优解，过小的学习率会导致模型收敛过慢</p>
+<p><code>loss</code> 损失函数。在不同问题中要选择不同的损失函数。在分类问题中选择<code>CategoricalCrossentropy</code>(交叉熵)即可</p>
+<p><code>metrics</code> 优化指标，选择准确率即可</p>
+<h2 id="设置监控和检查点"><a class="markdownIt-Anchor" href="#设置监控和检查点"></a> 设置监控和检查点</h2>
+<p>我们使用TensorBoard来可视化监控训练过程。使用检查点来自动保存每一轮训练之后的最佳模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">callbacks = [keras.callbacks.TensorBoard(),</span><br><span class="line">                keras.callbacks.ModelCheckpoint(</span><br><span class="line">                    filepath=<span class="string">&quot;checkpoints/weights.&#123;epoch:02d&#125;-&#123;val_accuracy:.4f&#125;.h5&quot;</span>,</span><br><span class="line">                    monitor=<span class="string">&#x27;val_accuracy&#x27;</span>,</span><br><span class="line">                    verbose=<span class="number">1</span>,</span><br><span class="line">                    save_best_only=<span class="literal">True</span>,</span><br><span class="line">                    mode=<span class="string">&#x27;max&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+<p><code>val_accuracy</code>代表在测试数据集上的准确率，这里设置为保存测试数据集下准确率最高的模型。每进行一轮训练就会判断一次；<code>checkpoints</code>文件夹需要手动预先创建</p>
+<p>TensorBoard的日志会被保存到<code>logs</code>文件夹里</p>
+<h1 id="开始训练"><a class="markdownIt-Anchor" href="#开始训练"></a> 开始训练</h1>
+<p>一行代码即可开始训练</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model.fit(train_data, epochs=<span class="number">50</span>, steps_per_epoch=<span class="number">1200</span>, validation_data=test_data,</span><br><span class="line">             validation_steps=<span class="number">800</span>,</span><br><span class="line">             callbacks=callbacks)</span><br></pre></td></tr></table></figure>
+<p>训练过程分为不同轮次(epochs)，一轮训练中会有很多步(step)，每一步将会把一个批次传输到GPU内进行计算。一般来说传输相同数据，减少传输次数增加每次数据量可以提高速度</p>
+<p>每一轮训练后将会在测试集上进行验证，<code>validation_steps</code>控制验证步数</p>
+<h1 id="查看监控"><a class="markdownIt-Anchor" href="#查看监控"></a> 查看监控</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir .\logs\</span><br></pre></td></tr></table></figure>
+<p>接下来就可以在浏览器中查看日志，贴一个六个小时的训练结果(没好的显卡，模型性能也不怎么样)</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://i.loli.net/2021/10/28/41I7pdrAUONEwse.png" alt="" /></p>
+<h1 id="模型部署"><a class="markdownIt-Anchor" href="#模型部署"></a> 模型部署</h1>
+<p>我们的模型当然是要用起来了！</p>
+<p>对于移动端部署可以使用<code>TensorFlow Lite</code>或者是一些各大厂商的终端推理框架</p>
+<p>如果在PC端部署可以使用<code>OnnxRuntime</code>部署，提供了预编译的多种语言SDK(有Java sdk可以包含在Mirai插件内)</p>
+<h2 id="模型的转换"><a class="markdownIt-Anchor" href="#模型的转换"></a> 模型的转换</h2>
+<p>基本上来说部署的第一步都是先将模型量化为<code>tflite</code>的模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> model <span class="keyword">import</span> get_model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = get_model()</span><br><span class="line">model.load_weights(<span class="string">&quot;checkpoints/xxx.h5&quot;</span>)</span><br><span class="line">converter = tf.lite.TFLiteConverter.from_keras_model(model)</span><br><span class="line">converter.optimizations = [tf.lite.Optimize.DEFAULT] <span class="comment"># 启用默认优化来加快推理速度，但会损失少量精度</span></span><br><span class="line">tflite_model = converter.convert()</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;model.tflite&quot;</span>,<span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(tflite_model)</span><br></pre></td></tr></table></figure>
+<p>到这一步就可以使用tflite在手机端使用了。如果要使用<code>OnnxRuntime</code>的话还需要把tflite模型转换为<code>onnx</code>模型</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://github.com/onnx/tensorflow-onnx">https://github.com/onnx/tensorflow-onnx</a></p>
+<p>需要注意的是在进行部署推理的时候，传入的数据也要遵循相同的预处理模式。即也需要除于255</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">RainChan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://rainchan.win/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/">https://rainchan.win/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://rainchan.win" target="_blank">RainChan的小博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/AI/">AI</a></div><div class="post_share"><div class="social-share" data-image="https://pximg2.rainchan.win/img?img_id=64702380&amp;web=true" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://fastly.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/02/%E5%9C%A8STM32CubeMX%E4%B8%AD%E6%AD%A3%E7%A1%AE%E9%87%8D%E5%AE%9A%E5%90%91stdio/"><img class="prev-cover" data-lazy-src="https://pximg2.rainchan.win/img?img_id=57766559&amp;web=true" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">在STM32CubeMX中正确重定向stdio</div></div></a></div><div class="next-post pull-right"><a href="/2021/08/09/%E4%B8%80%E5%8A%A0wifi%E5%97%85%E6%8E%A2%E5%8A%9F%E8%83%BD%E8%A7%A3%E6%9E%90%E5%92%8C%E5%88%A9%E7%94%A8/"><img class="next-cover" data-lazy-src="https://pximg.rainchan.win/img?img_id=23824702&amp;web=true" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">一加wifi嗅探功能解析和利用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/07/充分使用Colab的免费TPU/" title="充分使用Colab的免费TPU"><img class="cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-07</div><div class="title">充分使用Colab的免费TPU</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">RainChan</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mzdluo123"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">大部分静态资源地址已切换，现在应该可以正常访问了</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text"> 安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%92%8C%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text"> 数据的加载和预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%A0%87%E7%AD%BE"><span class="toc-number">3.1.</span> <span class="toc-text"> 处理标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87"><span class="toc-number">3.2.</span> <span class="toc-text"> 处理图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">3.3.</span> <span class="toc-text"> 构建数据处理流水线</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text"> 构建模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text"> 编写训练代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%9B%91%E6%8E%A7%E5%92%8C%E6%A3%80%E6%9F%A5%E7%82%B9"><span class="toc-number">5.1.</span> <span class="toc-text"> 设置监控和检查点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83"><span class="toc-number">6.</span> <span class="toc-text"> 开始训练</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%9B%91%E6%8E%A7"><span class="toc-number">7.</span> <span class="toc-text"> 查看监控</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2"><span class="toc-number">8.</span> <span class="toc-text"> 模型部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">8.1.</span> <span class="toc-text"> 模型的转换</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/05/15/Clash-tun%E6%A8%A1%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" title="Clash-tun模式配置指南"><img data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Clash-tun模式配置指南"/></a><div class="content"><a class="title" href="/2022/05/15/Clash-tun%E6%A8%A1%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" title="Clash-tun模式配置指南">Clash-tun模式配置指南</a><time datetime="2022-05-15T11:48:00.000Z" title="发表于 2022-05-15 19:48:00">2022-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/30/%E5%9C%A8WSL2%E7%9A%84Ubuntu%E9%87%8C%E9%85%8D%E7%BD%AEsystemd/" title="在WSL2的Ubuntu里配置systemd"><img data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在WSL2的Ubuntu里配置systemd"/></a><div class="content"><a class="title" href="/2022/04/30/%E5%9C%A8WSL2%E7%9A%84Ubuntu%E9%87%8C%E9%85%8D%E7%BD%AEsystemd/" title="在WSL2的Ubuntu里配置systemd">在WSL2的Ubuntu里配置systemd</a><time datetime="2022-04-30T12:46:55.000Z" title="发表于 2022-04-30 20:46:55">2022-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/07/%E5%85%85%E5%88%86%E4%BD%BF%E7%94%A8Colab%E7%9A%84%E5%85%8D%E8%B4%B9TPU/" title="充分使用Colab的免费TPU"><img data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="充分使用Colab的免费TPU"/></a><div class="content"><a class="title" href="/2022/02/07/%E5%85%85%E5%88%86%E4%BD%BF%E7%94%A8Colab%E7%9A%84%E5%85%8D%E8%B4%B9TPU/" title="充分使用Colab的免费TPU">充分使用Colab的免费TPU</a><time datetime="2022-02-07T12:21:10.000Z" title="发表于 2022-02-07 20:21:10">2022-02-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/02/%E5%9C%A8STM32CubeMX%E4%B8%AD%E6%AD%A3%E7%A1%AE%E9%87%8D%E5%AE%9A%E5%90%91stdio/" title="在STM32CubeMX中正确重定向stdio"><img data-lazy-src="https://pximg2.rainchan.win/img?img_id=57766559&amp;web=true" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在STM32CubeMX中正确重定向stdio"/></a><div class="content"><a class="title" href="/2021/11/02/%E5%9C%A8STM32CubeMX%E4%B8%AD%E6%AD%A3%E7%A1%AE%E9%87%8D%E5%AE%9A%E5%90%91stdio/" title="在STM32CubeMX中正确重定向stdio">在STM32CubeMX中正确重定向stdio</a><time datetime="2021-11-02T08:35:35.000Z" title="发表于 2021-11-02 16:35:35">2021-11-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/" title="使用TensorFlow快速实现图片分类"><img data-lazy-src="https://pximg2.rainchan.win/img?img_id=64702380&amp;web=true" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用TensorFlow快速实现图片分类"/></a><div class="content"><a class="title" href="/2021/10/28/%E4%BD%BF%E7%94%A8TensorFlow%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%88%86%E7%B1%BB/" title="使用TensorFlow快速实现图片分类">使用TensorFlow快速实现图片分类</a><time datetime="2021-10-28T02:21:40.000Z" title="发表于 2021-10-28 10:21:40">2021-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2022 By RainChan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://fastly.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://fastly.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://fastly.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk({
+      clientID: 'a7f89493fe9d480aaff3',
+      clientSecret: 'da80ecf2ad0dff7a81bad3222eedd98cba397719',
+      repo: 'mzdluo123.github.io',
+      owner: 'mzdluo123',
+      admin: ['mzdluo123'],
+      id: 'db4d5e85c90a1b147842324a29ead4d9',
+      language: 'zh-CN',
+      proxy: 'https://bloom-noiseless-wire.glitch.me/https://github.com/login/oauth/access_token',
+      perPage: 10,
+      distractionFreeMode: false,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      updateCountCallback: commentCount
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://fastly.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !true) {
+  if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
