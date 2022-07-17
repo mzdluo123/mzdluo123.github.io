@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://tva4.sinaimg.cn/large/9bd9b167gy1g4c8t3szutj21hc0u01kx.jpg">
 <meta property="article:published_time" content="2021-05-27T14:58:39.000Z">
-<meta property="article:modified_time" content="2022-07-07T14:43:21.892Z">
+<meta property="article:modified_time" content="2022-07-17T11:27:21.116Z">
 <meta property="article:author" content="RainChan">
 <meta property="article:tag" content="物联网">
 <meta property="article:tag" content="硬件">
@@ -58,7 +58,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2022-07-07 14:43:21'
+  postUpdate: '2022-07-17 11:27:21'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -140,7 +140,7 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://tva4.sinaimg.cn/large/9bd9b167gy1g4c8t3szutj21hc0u01kx.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">RainChan的小博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">物联网开发入门1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-27T14:58:39.000Z" title="发表于 2021-05-27 14:58:39">2021-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-07T14:43:21.892Z" title="更新于 2022-07-07 14:43:21">2022-07-07</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>好久不见！最近都在做一些学校里的事，根本没空来学习一些别的东西。最近正在入门esp32，这是我的学习记录，同时也是给其他人看的一篇快速入门教程。<br>教程不会涉及过多底层细节，教程的目的是能够让读者快速使用物联网开发板制作产品原型用于比赛等，或者是diy一些小东西，深入学习还得看更加详细的书籍。</p>
+    })(window)</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://gravatar.loli.net/avatar/f7e8af6d341b76ad3de6757a8f86f2b4?d=mp&amp;v=1.3.10" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://tva4.sinaimg.cn/large/9bd9b167gy1g4c8t3szutj21hc0u01kx.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">RainChan的小博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-cog"></i><span> 项目</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/projects/pximg"><span> Pixiv图片API</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">物联网开发入门1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-27T14:58:39.000Z" title="发表于 2021-05-27 14:58:39">2021-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-17T11:27:21.116Z" title="更新于 2022-07-17 11:27:21">2022-07-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>好久不见！最近都在做一些学校里的事，根本没空来学习一些别的东西。最近正在入门esp32，这是我的学习记录，同时也是给其他人看的一篇快速入门教程。<br>教程不会涉及过多底层细节，教程的目的是能够让读者快速使用物联网开发板制作产品原型用于比赛等，或者是diy一些小东西，深入学习还得看更加详细的书籍。</p>
 <p>文章用一些小实验来讲解功能的使用，使用esp32开发板和esp-idf开发框架</p>
 <p>本文默认读者学习过并熟练使用C语言</p>
 <p>部分图片来源于网络，如有侵权可以联系我删除</p>
@@ -168,37 +168,37 @@
 <h1 id="数字电路基础-1"><a href="#数字电路基础-1" class="headerlink" title="数字电路基础"></a>数字电路基础</h1><h2 id="数字电路和模拟电路"><a href="#数字电路和模拟电路" class="headerlink" title="数字电路和模拟电路"></a>数字电路和模拟电路</h2><p>模拟电路工作的信号是模拟信号，模拟信号时间和电平上都是连续变化的</p>
 <p>数字电路工作的信号是数字信号，数字信号是离散的，不连续的，要么是高电平要么是低电平</p>
 <p>规定低电平为0-0.25v，用0表示  高电平为3.5-5v，用1表示</p>
-<h2 id="晶体管"><a href="#晶体管" class="headerlink" title="晶体管"></a>晶体管</h2><p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527153235.png" alt=""></p>
+<h2 id="晶体管"><a href="#晶体管" class="headerlink" title="晶体管"></a>晶体管</h2><p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527153235.png" alt=""></p>
 <p>在数字电路中，晶体管的作用可以简单理解成一个开关，它通过电流或电压来控制输出端的电流；晶体管简单分为NPN型和PNP型，每一种晶体管型号都有不同的特性</p>
-<p>图中的晶体管为PNP型，最上面的叫做集电极，左边的叫做基级，下面的叫做发射级。<br>可以简单的这样理解：当基级为低电平时，集电极和发射极不导通，输出高电平<br><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527154047.png" alt=""></p>
-<p>当基级为高电平时，集电极和发射极导通，输出低电平<br><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527154100.png" alt=""></p>
+<p>图中的晶体管为PNP型，最上面的叫做集电极，左边的叫做基级，下面的叫做发射级。<br>可以简单的这样理解：当基级为低电平时，集电极和发射极不导通，输出高电平<br><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527154047.png" alt=""></p>
+<p>当基级为高电平时，集电极和发射极导通，输出低电平<br><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527154100.png" alt=""></p>
 <p>除晶体管外，还有场效应管也能达到类似的作用</p>
 <h2 id="逻辑门"><a href="#逻辑门" class="headerlink" title="逻辑门"></a>逻辑门</h2><p>最简单的逻辑门有三种，或门，与门，非门</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527151639.png" alt=""></p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527151656.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527151639.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527151656.png" alt=""></p>
 <p>（图中的逻辑符号为中国标准，在一些仿真软件中显示的门为国际标准可能外观不同）</p>
 <p>除与门，或门，非门之外的其他门都可以使用与或非门组合得到</p>
 <p>关于门的作用可以的看右边的真值表理解</p>
 <h2 id="编码器和译码器"><a href="#编码器和译码器" class="headerlink" title="编码器和译码器"></a>编码器和译码器</h2><p>本文主要介绍二进制编码器译码器</p>
 <p>在数字电路中，每一条线路上只有高电平和低电平两种状态。如果需要表示不同的数据就需要多条线路输入</p>
 <p>用n位二进制对2n个信号进行编码的电路叫做二进制编码器</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527161959.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527161959.png" alt=""></p>
 <p>使用编码器的好处是可以节约单片机的io接口</p>
 <p>同理，译码器的作用就是输入编码后的数据，译码器还原为n个输出</p>
 <h2 id="触发器和寄存器"><a href="#触发器和寄存器" class="headerlink" title="触发器和寄存器"></a>触发器和寄存器</h2><p>触发器的作用是保存信息，只有当时钟(脉冲信号)上升（或下降）的一瞬间，触发器会读取并锁存输入信号。输出信号仅在时钟信号上升（或下降）的一瞬间会发生变化。</p>
 <p>边缘D触发器</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527163223.png" alt=""></p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527163324.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527163223.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527163324.png" alt=""></p>
 <p>可以从波形图上观察出边缘D触发器的工作特性，其中带-的都是反向输入端(低电平有效)</p>
 <p>无论什么时候Rd非输入低电平，输出立即变为低电平，Sd非输入低电平，输出立即变为高电平</p>
 <p>当时钟信号CP出现上升沿时将会读取D的电平并保持输出</p>
 <p>将多个D触发器组合在一起可以组成存储多个二进制位的寄存器</p>
 <h1 id="单片机硬件-1"><a href="#单片机硬件-1" class="headerlink" title="单片机硬件"></a>单片机硬件</h1><p>本教程使用ESP32单片机作为教程，目的是快速打造物联网作品原型</p>
-<h2 id="单片机结构"><a href="#单片机结构" class="headerlink" title="单片机结构"></a>单片机结构</h2><p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527164831.png" alt=""></p>
+<h2 id="单片机结构"><a href="#单片机结构" class="headerlink" title="单片机结构"></a>单片机结构</h2><p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527164831.png" alt=""></p>
 <p>可以看到ESP32有很丰富的硬件配置，包括32位双核CPU和自带WiFi蓝牙，内置的加密算法硬件加速模块和大量IO相关功能</p>
 <h3 id="时钟有什么用"><a href="#时钟有什么用" class="headerlink" title="时钟有什么用"></a>时钟有什么用</h3><p>对于CPU来说大家都非常熟悉，CPU的工作需要时钟脉冲，时钟驱动CPU中的时序电路来完成各种复杂的功能（例如上面的触发器就需要时钟信号），同时也为单片机的其他部分提供基准频率。</p>
 <p>时钟信号通常是由石英晶体谐振器产生的</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://fastly.jsdelivr.net/gh/mzdluo123/blog_imgs/img/20210527165827.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://imgcdn.rainchan.win/img/20210527165827.png" alt=""></p>
 <h3 id="如何控制单片机的硬件功能"><a href="#如何控制单片机的硬件功能" class="headerlink" title="如何控制单片机的硬件功能"></a>如何控制单片机的硬件功能</h3><p>简单来说，在ESP32单片机中，所有的外设都会被映射到内存中指定位置，修改这些位置的内存值就可以控制这些外设</p>
 <p>映射的地址可以查询数据手册得到，但是在本文中我们不会直接通过修改内存的方式使用外设，这样的方式使用不便且难以维护，esp-idf为我们提供了易用的访问接口，我们可以直接使用接口来控制外设</p>
 <h2 id="GPIO"><a href="#GPIO" class="headerlink" title="GPIO"></a>GPIO</h2><p>让我们从点亮一个LED开始，由于篇幅过长请等下一篇文章</p>
